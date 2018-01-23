@@ -18,6 +18,5 @@ end
 # Dependencies:
 depends 'ssl_certificate', '~> 2.1.0' # ~CG00
 depends 'logrotate', '~> 2.1' # ~CG001
-depends 'rsyslog', '>= 1.0' # ~CG001
 
 gem 'toml-rb', '= 1.0.0'
