@@ -2,26 +2,13 @@
 
 Installs and configures Mercury Global Loadbalancer.
 
-## Upgrading from 1.0 to 1.2
-With support of multiple healthchecks the `healthcheck` attribute has been renamed to `healthchecks` and this is now an array:
+## What is Mercury?
 
-In terms of chef searches that means that you can convert:
-`healthcheck: {}`
-to 
-`healthchecks: [{}]`
+Mercury is a Global loadbalancer, designed to add a dns based loadbalancing layer on top of its internal loadbalancer or 3rd pary loadbalancers such as cloud services
+This makes mercury able to loadbalance across multiple cloud environments using dns, while keeping existing cloud loadbancer sollutions in place
 
-this has been made backwards compatible in the sense that using the old `healthcheck` will keep working, but you do NOT combine both `healthcheck` and `healthchecks`.
-
-## Upgrading from 0.x to 1.0
-
-The old setup of Cross-Connects, where the loadbalancers tell eachother the other nodes they can connect to, is no longer used.
-Instead configure all nodes you want to share on each load balancer.
-
-In terms of chef searches that means that you can convert:
-`nodes: [{ search: "recipe:xyz_recipe AND chef_environment:#{node.chef_environment} AND sbp_glb_site:#{site}", port: 1234 }],`
-to 
-`nodes: [{ search: "recipe:xyz_recipe AND chef_environment:#{node.chef_environment}", port: 1234 }],`
-so that it will add all nodes with that recipe to each loadbalancer
+* Source: https://github.com/schubergphilis/mercury
+* Binaries: https://github.com/schubergphilis/mercury/releases
 
 ## Requirements
 
@@ -33,10 +20,6 @@ so that it will add all nodes with that recipe to each loadbalancer
 - RHEL 7+, CentOS7+
 
 ## Documentation
-
-Documentation is in this readme
-
-## Resources
 
 ### Install
 
@@ -89,14 +72,6 @@ default['mercury']['web'] = {
 	port: 9001 -- port to listen to for web interface
 	tls: { -- see tls settings below
 	}
-}
-
-default['mercury']['stats'] = {
-    host: 'statshost' -- host to send stats to
-    port: 2013 -- port to send stats to
-    interval: 10 -- how many seconds to wait before sending all catured data
-    cachesize: 5000 -- how many stats to keep in buffer before purging
-    client: 'carbon|statsd' -- type of service we send stats to
 }
 
 default['mercury']['loadbalancer']['pools'] = {
@@ -405,7 +380,7 @@ $ knife data bag show mercury certificates_aroductionp --secret-file secrey_key 
 
 ### Examples
 
-#### You can find existing configurations in the examples directory
+Below You can find some example configurations
 
 #### HTTPS VIP example
 Simple site, that serves a website using SSL offloading - we allow SSL connects, and use HTTP connects to the backend
