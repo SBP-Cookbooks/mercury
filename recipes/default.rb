@@ -107,7 +107,6 @@ end
 config['loadbalancer'] = node['mercury']['loadbalancer'].to_hash.clone
 config['web'] = node['mercury']['web'].to_hash.clone
 config['dns'] = node['mercury']['dns'].to_hash.clone
-config['stats'] = node['mercury']['stats'].to_hash.clone
 
 # Cluster SSL connection
 cert = ssl_certificate 'cluster_communication' do
@@ -138,10 +137,6 @@ end
 config['web']['tls']['certificatefile'] = "#{cert.cert_dir}/web.mercury.crt"
 config['web']['tls']['certificatekey'] = "#{cert.cert_dir}/web.mercury.key"
 
-# If no host specified, and we have a proxy, then use proxy
-if config['stats']['host'] == '' && node['proxy'] && node['proxy']['host'] != ''
-  config['stats']['host'] = node['proxy']['host']
-end
 config['logging'] = node['mercury']['logging']
 
 config['loadbalancer']['pools'].each do |poolname, pool|
@@ -235,25 +230,25 @@ config['loadbalancer']['pools'].each do |poolname, pool|
   end
 end
 
-package_name = node['mercury']['mercury']['name']
-package_version = node['mercury']['mercury']['version']
-package_arch = node['mercury']['mercury']['arch']
-package_source = node['mercury']['mercury']['source']
+package_name = node['mercury']['package']['name']
+package_version = node['mercury']['package']['version']
+package_arch = node['mercury']['package']['arch']
+package_source = node['mercury']['package']['source']
 
 # Install the RPM
-remote_file "#{Chef::Config[:file_cache_path]}/#{package_name}-#{package_version}.#{package_arch}.rpm" do
-  source "#{package_source}/#{package_name}-#{package_version}.#{package_arch}.rpm"
+remote_file "#{Chef::Config[:file_cache_path]}/#{package_name}-#{package_version}-1.#{package_arch}.rpm" do
+  source "#{package_source}"
   action :create
 end
 
-rpm_package "#{package_name}-#{package_version}.#{package_arch}.rpm" do
-  source "#{Chef::Config[:file_cache_path]}/#{package_name}-#{package_version}.#{package_arch}.rpm"
+rpm_package "mercury" do
+  source "#{Chef::Config[:file_cache_path]}/#{package_name}-#{package_version}-1.#{package_arch}.rpm"
   action :install
   notifies :run, 'execute[config test and restart]'
 end
 
 # Write the config file
-file node['mercury']['mercury']['config'] do
+file node['mercury']['package']['config'] do
   content TomlRB.dump(config)
   mode 0o0644
   notifies :run, 'execute[config test and reload]'
@@ -261,7 +256,7 @@ end
 
 # Always do the config test, chef needs to fail if this fails, we need to fix the LB urgently
 execute 'config test' do
-  command "#{node['mercury']['mercury']['bin']} --config-file #{node['mercury']['mercury']['config']} -check-config"
+  command "#{node['mercury']['package']['bin']} --config-file #{node['mercury']['package']['config']} -check-config"
 end
 
 # Ensure mercury is started
@@ -274,33 +269,38 @@ execute 'systemctl daemon-reload' do
 end
 
 execute 'config test and restart' do
-  command "#{node['mercury']['mercury']['bin']} --config-file #{node['mercury']['mercury']['config']} -check-config"
+  command "#{node['mercury']['package']['bin']} --config-file #{node['mercury']['package']['config']} -check-config"
   notifies :restart, 'service[mercury]'
   notifies :run, 'execute[systemctl daemon-reload]'
   action :nothing
 end
 
 execute 'config test and reload' do
-  command "#{node['mercury']['mercury']['bin']} --config-file #{node['mercury']['mercury']['config']} -check-config"
+  command "#{node['mercury']['package']['bin']} --config-file #{node['mercury']['package']['config']} -check-config"
   action :nothing
   notifies :reload, 'service[mercury]'
 end
 
-# TODO: fix hardcoded pid on syslog
-logrotate_app 'tomcat-myapp' do
-  path '/var/log/mercury'
-  options   ['compress']
-  frequency 'daily'
-  rotate    30
-  postrotate "kill -1 `cat #{node['mercury']['mercury']['pid']}` `cat /var/run/syslogd.pid`"
-  create '644 root root'
+# Only if we log to a path do we do logrotate
+if node['mercury']['logging']['output'] =~ /\//
+  logrotate_app 'mercury-gslb' do
+    path       node['mercury']['logging']['output']
+    options    node['mercury']['logging']['rotate']['options']
+    frequency  node['mercury']['logging']['rotate']['frequency']
+    rotate     node['mercury']['logging']['rotate']['rotate']
+    postrotate node['mercury']['logging']['rotate']['postrotate']
+    create     node['mercury']['logging']['rotate']['create']
+  end
 end
 
-cookbook_file '/etc/systemd/journald.conf' do
-  source 'journald.conf'
-  notifies :run, 'execute[systemctl restart systemd-journald]'
-end
+# For syslog logging disable rate-limiting the log
+if node['mercury']['logging']['output'] == "syslog"
+  cookbook_file '/etc/systemd/journald.conf' do
+    source 'journald.conf'
+    notifies :run, 'execute[systemctl restart systemd-journald]'
+  end
 
-execute 'systemctl restart systemd-journald' do
-  action :nothing
+  execute 'systemctl restart systemd-journald' do
+    action :nothing
+  end
 end

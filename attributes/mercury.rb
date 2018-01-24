@@ -31,6 +31,13 @@ default['mercury'].tap do |mercury|
   mercury['logging']['level'] = 'info'
   mercury['logging']['output'] = 'syslog'
 
+  # Logrotate for  when logging to a file
+  mercury['logging']['rotate']['postrotate'] = "kill -1 `cat #{node['mercury']['package']['pid']}`"
+  mercury['logging']['rotate']['frequency'] = 'daily'
+  mercury['logging']['rotate']['rotate'] = 30
+  mercury['logging']['rotate']['options'] = ['compress']
+  mercury['logging']['rotate']['create'] = '644 root root'
+
   # GLB cluster communication vip
   mercury['cluster']['name'] = "GLB_#{node.chef_environment.upcase}"
   mercury['cluster']['settings']['connection_timeout'] = 10
@@ -63,4 +70,5 @@ default['mercury'].tap do |mercury|
 
   # Settings
   mercury['loadbalancer']['settings']['default_balance_method'] = 'roundrobin'
+  mercury['loadbalancer']['pools'] = {}
 end

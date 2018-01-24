@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: <%= ENV['OMNIBUS_CHEF_CLIENT_VERSION'] || 'latest' %>
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-6.8
+  - name: centos-7.3
+  - name: windows-2012r2
+  - name: windows-2016
+
+suites:
+  - name: default
+    run_list:
+      - recipe[mercury::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:

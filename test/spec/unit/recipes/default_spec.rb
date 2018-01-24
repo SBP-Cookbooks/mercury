@@ -27,20 +27,23 @@ describe 'mercury::default' do
     end
 
     it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
-  end
-
-  context 'When all attributes are default on a Windows 2012 R2 system' do
-    let(:chef_run) do
-      # for a complete list of available platforms and versions see:
-      # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
-      runner = ChefSpec::ServerRunner.new(platform: 'windows', version: '2012R2')
-      runner.converge(described_recipe)
+      expect {chef_run}.to_not raise_error
     end
 
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
+    it 'installs the package' do
+      expect(chef_run).to install_rpm_package('mercury')
+    end
+
+    it 'writes the config' do
+      expect(chef_run).to create_file('/etc/mercury/mercury.toml')
+    end
+
+    it 'test the config' do
+      expect(chef_run).to run_execute('config test')
+    end
+
+    it 'start the service' do
+      expect(chef_run).to start_service('mercury')
     end
   end
 end
