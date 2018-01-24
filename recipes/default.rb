@@ -16,14 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-chef_gem 'toml-rb' do
-  compile_time true
-  version '1.0.0'
-  action :install
-end
-
+# toml is required to build the config file
 require 'toml-rb'
-require 'pry'
+
 config = Mash.new
 
 # setup all default variables
