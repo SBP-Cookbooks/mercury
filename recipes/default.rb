@@ -132,7 +132,9 @@ end
 config['web']['tls']['certificatefile'] = "#{cert.cert_dir}/web.mercury.crt"
 config['web']['tls']['certificatekey'] = "#{cert.cert_dir}/web.mercury.key"
 
-config['logging'] = node['mercury']['logging']
+config['logging'] ||= {}
+config['logging']['level'] = node['mercury']['logging']['level']
+config['logging']['output'] = node['mercury']['logging']['output']
 
 config['loadbalancer']['pools'].each do |poolname, pool|
   # parse all listeners and see if we need to setup SSL certificates
