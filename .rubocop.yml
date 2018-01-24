@@ -1,0 +1,22 @@
+AllCops:
+  Include:
+    - Berksfile
+    - Gemfile
+    - Rakefile
+    - Thorfile
+    - Guardfile
+  Exclude:
+    - vendor/**
+  TargetRubyVersion: 2.1
+
+Metrics/LineLength:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+
+SpaceBeforeFirstArg:
+  Exclude:
+    - "**/metadata.rb"
+
+Metrics/BlockLength:
+  Max: 250

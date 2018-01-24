@@ -91,7 +91,7 @@ elsif mercury_version >= Gem::Version.new('0.9.3')
 
   # remove self from cluster node list and add self to binding instead
   foundclusternodes.each do |cn|
-    if cn[:name] == node[:fqdn] || node[:fqdn].empty?
+    if cn[:name] == node[:fqdn] || node[:fqdn].empty? # ~FC001 ~FC019
       config['cluster']['binding'] = cn
     else
       clusternodes << cn
@@ -237,11 +237,11 @@ package_source = node['mercury']['package']['source']
 
 # Install the RPM
 remote_file "#{Chef::Config[:file_cache_path]}/#{package_name}-#{package_version}-1.#{package_arch}.rpm" do
-  source "#{package_source}"
+  source package_source.to_s
   action :create
 end
 
-rpm_package "mercury" do
+rpm_package 'mercury' do
   source "#{Chef::Config[:file_cache_path]}/#{package_name}-#{package_version}-1.#{package_arch}.rpm"
   action :install
   notifies :run, 'execute[config test and restart]'
@@ -282,7 +282,7 @@ execute 'config test and reload' do
 end
 
 # Only if we log to a path do we do logrotate
-if node['mercury']['logging']['output'] =~ /\//
+if node['mercury']['logging']['output'] =~ %r{/}
   logrotate_app 'mercury-gslb' do
     path       node['mercury']['logging']['output']
     options    node['mercury']['logging']['rotate']['options']
@@ -294,7 +294,7 @@ if node['mercury']['logging']['output'] =~ /\//
 end
 
 # For syslog logging disable rate-limiting the log
-if node['mercury']['logging']['output'] == "syslog"
+if node['mercury']['logging']['output'] == 'syslog'
   cookbook_file '/etc/systemd/journald.conf' do
     source 'journald.conf'
     notifies :run, 'execute[systemctl restart systemd-journald]'

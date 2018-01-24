@@ -11,12 +11,12 @@ issues_url 'https://github.com/schubergphilis/mercury/issues'
 source_url 'https://github.com/schubergphilis/mercury'
 
 # Supported OSes:
-%w(centos redhat).each do |os|
- supports os
+%w[centos redhat].each do |os|
+  supports os
 end
 
 # Dependencies:
-depends 'ssl_certificate', '~> 2.1.0' # ~CG00
+depends 'ssl_certificate', '~> 2.1.0' # ~CG001
 depends 'logrotate', '~> 2.1' # ~CG001
 
 gem 'toml-rb', '= 1.0.0'

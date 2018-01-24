@@ -12,8 +12,6 @@ verifier:
 platforms:
   - name: centos-6.8
   - name: centos-7.3
-  - name: windows-2012r2
-  - name: windows-2016
 
 suites:
   - name: default
