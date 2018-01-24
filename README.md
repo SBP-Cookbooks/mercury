@@ -34,9 +34,7 @@ so that it will add all nodes with that recipe to each loadbalancer
 
 ## Documentation
 
-Besides the examples describe here, documentation is also available on Confluence
-
-https://confluence.schubergphilis.com/display/library/Mercury+Global+Loadbalancer
+Documentation is in this readme
 
 ## Resources
 
@@ -47,17 +45,17 @@ Include the default recipe
 ### Configuration items
 
 ```
-default['sbp_mercury']['settings'] = {
+default['mercury']['settings'] = {
     manage_network_interfaces: "(yes|no)" -- allow mercury to add vip's to the network interfaces (default: yes) - required for internal proxy or for haproxy who does not add vip's
 	enable_proxy: "(yes|no)"	-- use internal proxy for loadbalancing (default: yes) - not needed for external proxy programs, or dns only setup
 }
 
-default['sbp_mercury']['logging'] = {
+default['mercury']['logging'] = {
 	level: "(debug|info|warn|error)" -- log level
 	output: "(stdout|file)"	-- log output
 }
 
-default['sbp_mercury']['cluster'] = {
+default['mercury']['cluster'] = {
 	name: "" -- cluster group name
 	binding: "myhost" -- ip/interface to bind on, also acts as cluster name
     settings: {
@@ -80,20 +78,20 @@ default['sbp_mercury']['cluster'] = {
 }
 
 
-default['sbp_mercury']['dns'] = {
+default['mercury']['dns'] = {
 	binding: 'myhost' -- ip to bind on
   	port: 53 -- port to listen on for dns queries
   	allowed_requests: [ "A", "AAAA" ] -- what records to respond to (default is to allow most requests)
 }
 
-default['sbp_mercury']['web'] = {
+default['mercury']['web'] = {
 	binding: 'myhost' -- ip to bind on
 	port: 9001 -- port to listen to for web interface
 	tls: { -- see tls settings below
 	}
 }
 
-default['sbp_mercury']['stats'] = {
+default['mercury']['stats'] = {
     host: 'statshost' -- host to send stats to
     port: 2013 -- port to send stats to
     interval: 10 -- how many seconds to wait before sending all catured data
@@ -101,7 +99,7 @@ default['sbp_mercury']['stats'] = {
     client: 'carbon|statsd' -- type of service we send stats to
 }
 
-default['sbp_mercury']['loadbalancer']['pools'] = {
+default['mercury']['loadbalancer']['pools'] = {
 	'poolname' => { -- name of the pool/vip
 		listener: {
 			ip: ""  -- ip of the vip
@@ -214,13 +212,13 @@ default['sbp_mercury']['loadbalancer']['pools'] = {
 	}
 }
 
-default['sbp_mercury']['loadbalancer']['networks'] = { -- used for topology loadbalancing
+default['mercury']['loadbalancer']['networks'] = { -- used for topology loadbalancing
 	'site' => {
 		cidrs = [ "127.0.0.1/32" ]
 	}
 }
 
-default['sbp_mercury']['dns']['domains']['domain.org'] = { -- local dns records, also uses TTL as default for loadbalanced records
+default['mercury']['dns']['domains']['domain.org'] = { -- local dns records, also uses TTL as default for loadbalanced records
 	'ttl' => 10, -- default ttl for all records
 	'soa' => { -- standard soa record
   		name: 'mydomain.org',
@@ -245,7 +243,7 @@ default['sbp_mercury']['dns']['domains']['domain.org'] = { -- local dns records,
 	]
 }
 
-default['sbp_mercury']['dns']['allow_forwarding'] = [ "10.10.0.177/32", "::1/128" ] -- allows recursive dns queries for given clients (used when setting mercury as dns forwarding server)
+default['mercury']['dns']['allow_forwarding'] = [ "10.10.0.177/32", "::1/128" ] -- allows recursive dns queries for given clients (used when setting mercury as dns forwarding server)
 ```
 
 ### Loadbalancing Methods
@@ -407,16 +405,12 @@ $ knife data bag show mercury certificates_aroductionp --secret-file secrey_key 
 
 ### Examples
 
-#### You can find existing configurations in the following repos:
-
-* [Franx](https://sbp.gitlab.schubergphilis.com/FXT/fxt_globalloadbalancer_role)
-* [Prospery](https://sbp.gitlab.schubergphilis.com/WEL/wel_globalloadbalancer_role)
-* [LeasePlanBank Refresh](https://sbp.gitlab.schubergphilis.com/LPR-Cookbooks/lpr_globalloadbalancer_role)
+#### You can find existing configurations in the examples directory
 
 #### HTTPS VIP example
 Simple site, that serves a website using SSL offloading - we allow SSL connects, and use HTTP connects to the backend
 ```
-default['sbp_mercury']['loadbalancer']['pools']['my_backend_https'] = {
+default['mercury']['loadbalancer']['pools']['my_backend_https'] = {
   listener: { ip: 'myapp_vip', port: 443, mode: 'https' },
   backends: {
     'myapp_backend' => {
@@ -436,7 +430,7 @@ This will accept connections on 'myapp_vip', which will do a chef search for the
 #### HTTP -> HTTPS redirect example
 all requests on this ip on port 80 are redirected to their original domain and path to https://
 ```
-default['sbp_mercury']['loadbalancer']['pools']['http_redirect'] = {
+default['mercury']['loadbalancer']['pools']['http_redirect'] = {
   listener: { ip: matrix_ip['backend'], port: 80, mode: 'http' },
   outboundacls: [
     { action: 'add', header: 'Location', header_value: 'https://###REQ_HOST######REQ_PATH###' },
@@ -455,7 +449,7 @@ default['sbp_mercury']['loadbalancer']['pools']['http_redirect'] = {
 only requests to myapp.mydomain.org are served, all other requests are redirected to https://myapp.mydomain.org
 also we only allow private networks to connect to this site
 ```
-default['sbp_mercury']['loadbalancer']['pools']['my_backend_https'] = {
+default['mercury']['loadbalancer']['pools']['my_backend_https'] = {
   listener: { ip: 'myapp_vip', port: 443, mode: 'https' },
   backends: {
     'myapp_backend' => {
@@ -484,7 +478,7 @@ default['sbp_mercury']['loadbalancer']['pools']['my_backend_https'] = {
 #### HTTP serve site on all domains
 all requests to this ip/port serve this website
 ```
-default['sbp_mercury']['loadbalancer']['pools']['my_backend_https'] = {
+default['mercury']['loadbalancer']['pools']['my_backend_https'] = {
   listener: { ip: 'myapp_vip', port: 443, mode: 'https' },
   backends: {
     'myapp_backend' => {
