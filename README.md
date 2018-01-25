@@ -9,6 +9,7 @@ This makes mercury able to loadbalance across multiple cloud environments using 
 
 * Source: https://github.com/schubergphilis/mercury
 * Binaries: https://github.com/schubergphilis/mercury/releases
+* Docs: http://mercury-global-loadbalancer.readthedocs.io/en/latest/
 
 ## Requirements
 
