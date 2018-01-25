@@ -11,7 +11,7 @@ issues_url 'https://github.com/schubergphilis/mercury/issues'
 source_url 'https://github.com/schubergphilis/mercury'
 
 # Supported OSes:
-%w[centos redhat].each do |os|
+%w(centos redhat).each do |os|
   supports os
 end
 

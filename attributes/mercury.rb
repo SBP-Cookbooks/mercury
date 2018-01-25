@@ -48,8 +48,8 @@ default['mercury'].tap do |mercury|
 
   mercury['cluster']['tls']['insecureskipverify'] = true
   mercury['cluster']['tls']['minversion'] = 'VersionTLS12'
-  mercury['cluster']['tls']['ciphersuites'] = %w[TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_256_CBC_SHA]
-  mercury['cluster']['tls']['curvepreferences'] = %w[CurveP521 CurveP384 CurveP256]
+  mercury['cluster']['tls']['ciphersuites'] = %w(TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_256_CBC_SHA)
+  mercury['cluster']['tls']['curvepreferences'] = %w(CurveP521 CurveP384 CurveP256)
 
   mercury['cluster']['nodes'] = {}
 
@@ -62,8 +62,8 @@ default['mercury'].tap do |mercury|
   mercury['web']['binding'] = '0.0.0.0' # bind on all adresses
   mercury['web']['port'] = 9001
   mercury['web']['tls']['minversion'] = 'VersionTLS12'
-  mercury['web']['tls']['ciphersuites'] = %w[TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_256_CBC_SHA]
-  mercury['web']['tls']['curvepreferences'] = %w[CurveP521 CurveP384 CurveP256]
+  mercury['web']['tls']['ciphersuites'] = %w(TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_256_CBC_SHA)
+  mercury['web']['tls']['curvepreferences'] = %w(CurveP521 CurveP384 CurveP256)
 
   # Networks
   # none are set by default

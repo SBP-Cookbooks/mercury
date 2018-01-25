@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sbp-cookbooks/mercury.svg?branch=master)](https://travis-ci.org/sbp-cookbooks/mercury)
+
 # Mercury Global Loadbalancer Cookbook
 
 Installs and configures Mercury Global Loadbalancer.

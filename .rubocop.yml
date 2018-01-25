@@ -18,5 +18,18 @@ SpaceBeforeFirstArg:
   Exclude:
     - "**/metadata.rb"
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '()'
+    '%w':    '()'
+    '%i':    '()'
+    '%r':    '//'
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r
+
 Metrics/BlockLength:
   Max: 250

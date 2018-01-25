@@ -40,8 +40,7 @@ if mercury_version < Gem::Version.new('0.9.3')
                  search(:node, data[:search],
                         filter_result: {
                           'hostname' => ['fqdn'],
-                          # 'hostname' => ['hostname'],
-                          'ip' => ['ipaddress']
+                          'ip' => ['ipaddress'],
                         })
                end
       result.each do |k|
@@ -72,7 +71,7 @@ elsif mercury_version >= Gem::Version.new('0.9.3')
       result = search(:node, data[:search],
                       filter_result: {
                         'hostname' => ['fqdn'],
-                        'ip' => ['ipaddress']
+                        'ip' => ['ipaddress'],
                       })
       result.each do |n|
         foundclusternodes << { name: n['hostname'], addr: "#{n['ip']}:#{port}", authkey: authkey }
@@ -210,7 +209,7 @@ config['loadbalancer']['pools'].each do |poolname, pool|
         backend_nodes = search(:node, n['search'],
                                filter_result: {
                                  'hostname' => ['name'],
-                                 'ip' => ['ipaddress']
+                                 'ip' => ['ipaddress'],
                                })
       else
         backend_nodes = [{ 'hostname' => n['hostname'], 'ip' => n['ip'] }]
@@ -258,7 +257,7 @@ end
 
 # Ensure mercury is started
 service 'mercury' do
-  action %i[enable start]
+  action %i(enable start)
 end
 
 execute 'systemctl daemon-reload' do
