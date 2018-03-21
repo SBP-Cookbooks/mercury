@@ -2,6 +2,14 @@
 
  This file is used to list changes made in each major version of Mercury.
 
+## 1.2.5
+Changes:
+  * Now defaults to Mercury version 0.12.3
+
+## 1.2.3
+Changes:
+  * Now defaults to Mercury version 0.12.1
+
 ## 1.2.2
 Changes:
   * Now defaults to Mercury version 0.12.0
