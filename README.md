@@ -75,6 +75,19 @@ default['mercury']['web'] = {
 	port: 9001 -- port to listen to for web interface
 	tls: { -- see tls settings below
 	}
+  auth: {
+    password: {
+      "username": "sha256hashOfPassword"
+    }
+    ldap: {
+      host: 'ldaphost' -- ldap host to connect to
+      port: 389 -- ldap port to connect to, 389 for tls, 636 for ssl
+      method: 'tls' -- method of connection, tls or ssl
+      binddn: "OU=Users,DC=example,DC=com" -- search path to find users
+      filter: "(&(objectClass=organizationalPerson)(uid=%s))" -- filter path to find user
+      domain: 'example' -- domain to prepend to ldap login
+    }
+  }
 }
 
 default['mercury']['loadbalancer']['pools'] = {
@@ -155,7 +168,7 @@ default['mercury']['loadbalancer']['pools'] = {
 						insecureskipverify: true
 					}
 				},
-                healthcheckmode: "(any|all)" -- default: "all" - should 1 or all checks be ok for backend to be online 
+                healthcheckmode: "(any|all)" -- default: "all" - should 1 or all checks be ok for backend to be online
 				healthchecks: [{ // >= mercury version 0.10 - allows an array of healthchecks
 					type: '(httpget|httppost|tcpconnect)',
 					httpstatus: 200,
@@ -511,4 +524,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
