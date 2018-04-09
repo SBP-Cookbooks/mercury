@@ -137,7 +137,7 @@ config['logging']['output'] = node['mercury']['logging']['output']
 
 config['loadbalancer']['pools'].each do |poolname, pool|
   # parse all listeners and see if we need to setup SSL certificates
-  if pool['listener']['mode'] == 'https'
+  if pool['listener'].is_a?(Hash) && pool['listener']['mode'] == 'https'
     # No databag item, asume files are on disk
     cert = ssl_certificate poolname do
       namespace node['openssl']['ssl_certificate']
@@ -147,6 +147,9 @@ config['loadbalancer']['pools'].each do |poolname, pool|
       subject_alternate_names pool[:backends].map { |_, b| "#{b['dnsentry']['hostname']}.#{b['dnsentry']['domain']}" if b['dnsentry'] }.grep(String)
       cert_name "#{poolname}.mercury.crt"
       key_name "#{poolname}.mercury.key"
+      if pool['listener']['tls'].nil?
+        raise "No TLS config specified for listener in HTTPS mode (pool: #{poolname})"
+      end
 
       if !pool['listener']['tls']['databagitem'].nil? && !pool['listener']['tls']['databagitem'].empty?
         source 'data-bag'
@@ -293,10 +296,10 @@ end
 if node['mercury']['logging']['output'] == 'syslog'
   cookbook_file '/etc/systemd/journald.conf' do
     source 'journald.conf'
-    notifies :run, 'execute[systemctl restart systemd-journald]'
+    notifies :restart, 'service[systemd-journald]'
   end
 
-  execute 'systemctl restart systemd-journald' do
+  service 'systemd-journald' do
     action :nothing
   end
 end
