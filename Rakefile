@@ -44,16 +44,16 @@ rescue LoadError => e
 end
 
 # Integration tests. Kitchen.ci
-# namespace :integration do
-#   begin
-#     require 'kitchen/rake_tasks'
-# 
-#     desc 'Run kitchen integration tests'
-#     Kitchen::RakeTasks.new
-#   rescue StandardError => e
-#     puts ">>> Kitchen error: #{e}, omitting #{task.name}" unless ENV['CI']
-#   end
-# end
+namespace :integration do
+  begin
+    require 'kitchen/rake_tasks'
+
+    desc 'Run kitchen integration tests'
+    Kitchen::RakeTasks.new
+  rescue StandardError => e
+    puts ">>> Kitchen error: #{e}, omitting #{task.name}" unless ENV['CI']
+  end
+end
 
 # README generator
 begin
