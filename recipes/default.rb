@@ -296,10 +296,10 @@ end
 if node['mercury']['logging']['output'] == 'syslog'
   cookbook_file '/etc/systemd/journald.conf' do
     source 'journald.conf'
-    notifies :run, 'execute[systemctl restart systemd-journald]'
+    notifies :restart, 'service[systemd-journald]'
   end
 
-  execute 'systemctl restart systemd-journald' do
+  service 'systemd-journald' do
     action :nothing
   end
 end
