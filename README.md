@@ -424,7 +424,7 @@ all requests on this ip on port 80 are redirected to their original domain and p
 default['mercury']['loadbalancer']['pools']['http_redirect'] = {
   listener: { ip: matrix_ip['backend'], port: 80, mode: 'http' },
   outboundacls: [
-    { action: 'add', header: 'Location', header_value: 'https://###REQ_HOST######REQ_PATH###' },
+    { action: 'add', header_key: 'Location', header_value: 'https://###REQ_HOST######REQ_PATH###' },
     { action: 'add', status_code: 301 }
   ],
   backends: {
@@ -453,7 +453,7 @@ default['mercury']['loadbalancer']['pools']['my_backend_https'] = {
     },
     'redirect' => {
       outboundacls: [
-        { action: 'add', header: 'Location', header_value: 'https://myapp.mydomain.org' },
+        { action: 'add', header_key: 'Location', header_value: 'https://myapp.mydomain.org' },
         { action: 'add', status_code: 301 }
       ],
       inboundacls: [
