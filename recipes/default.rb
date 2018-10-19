@@ -18,6 +18,7 @@
 
 # toml is required to build the config file
 require 'toml-rb'
+require 'digest/md5'
 
 config = Mash.new
 
@@ -204,6 +205,31 @@ config['loadbalancer']['pools'].each do |poolname, pool|
       end
       backend['tls']['certificatefile'] = "#{cert.cert_dir}/#{poolname}.#{backendname}.mercury.crt"
       backend['tls']['certificatekey'] = "#{cert.cert_dir}/#{poolname}.#{backendname}.mercury.key"
+    end
+
+    backend['healthchecks'].each do |check|
+      if check['tls'] && !backend['tls']['databagitem'].nil? && !backend['tls']['databagitem'].empty?
+        ctag = Digest::MD5.hexdigest(check.to_s)
+        cert = ssl_certificate "#{poolname}.#{backendname}.#{ctag}" do
+          namespace node['openssl']['ssl_certificate']
+          cert_name "#{poolname}.#{backendname}.#{ctag}.mercury.crt"
+          key_name "#{poolname}.#{backendname}.#{ctag}.mercury.key"
+          source 'data-bag'
+          encrypted true
+          bag backend['tls']['databagname'] ? backend['tls']['databagname'] : 'mercury'
+          key_item backend['tls']['databagitem']
+          cert_item backend['tls']['databagitem']
+          cert_item_key backend['tls']['certificatefile']
+          key_item_key backend['tls']['certificatekey']
+          notifies :run, 'execute[config test and reload]'
+        end
+        # the ssl_certificate provider does not write the key..
+        file "#{cert.cert_dir}/#{poolname}.#{backendname}.#{ctag}.mercury.key" do
+          content cert.key_content
+        end
+        backend['tls']['certificatefile'] = "#{cert.cert_dir}/#{poolname}.#{backendname}.#{ctag}.mercury.crt"
+        backend['tls']['certificatekey'] = "#{cert.cert_dir}/#{poolname}.#{backendname}.#{ctag}.mercury.key"
+      end
     end
 
     backend['nodes'].each do |n|
