@@ -207,7 +207,7 @@ config['loadbalancer']['pools'].each do |poolname, pool|
       backend['tls']['certificatekey'] = "#{cert.cert_dir}/#{poolname}.#{backendname}.mercury.key"
     end
 
-    if backend['healtchecks']
+    if backend['healthchecks']
       backend['healthchecks'].each do |check|
         if check['tls'] && !check['tls']['databagitem'].nil? && !check['tls']['databagitem'].empty?
           ctag = Digest::MD5.hexdigest(check.to_s)
