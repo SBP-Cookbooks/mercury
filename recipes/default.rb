@@ -242,7 +242,8 @@ config['loadbalancer']['pools'].each do |poolname, pool|
                                  'ip' => ['ipaddress'],
                                })
       else
-        backend_nodes = [{ 'hostname' => n['hostname'], 'ip' => n['ip'] }]
+        # backend_nodes = [{ 'hostname' => n['hostname'], 'ip' => n['ip'] }]
+        backend_nodes = [n]
       end
       # chef can return multiple in search, so go through all of them
       backend_nodes.each do |m|

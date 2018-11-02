@@ -192,7 +192,8 @@ default['mercury']['loadbalancer']['pools'] = {
 						port: 80 -- connect to port 80 of this node
 					},
 					{
-						host: '1.2.3.4' -- specify host/ip
+						hostname: 'hostname' -- specify host (optional)
+						ip: '1.2.3.4' -- specify ip (required)
 						port: 80 -- connect to port 80 of this node
 					}
 				],
