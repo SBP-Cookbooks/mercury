@@ -281,6 +281,16 @@ file node['mercury']['package']['config'] do
   notifies :run, 'execute[config test and reload]'
 end
 
+# write service template file
+template '/etc/systemd/system/mercury.service' do
+  source 'mercury.service.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables mercury: node['mercury']
+  notifies :run, 'execute[config test and reload]'
+end
+
 # Always do the config test, chef needs to fail if this fails, we need to fix the LB urgently
 execute 'config test' do
   command "#{node['mercury']['package']['bin']} --config-file #{node['mercury']['package']['config']} -check-config"

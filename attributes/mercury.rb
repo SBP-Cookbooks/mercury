@@ -65,6 +65,9 @@ default['mercury'].tap do |mercury|
   mercury['web']['tls']['ciphersuites'] = %w(TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_256_CBC_SHA)
   mercury['web']['tls']['curvepreferences'] = %w(CurveP521 CurveP384 CurveP256)
 
+  # Environment variables
+  mercury['environment'] = []
+  # mercury['environment'] = [ 'PROFILER_ADDR=localhost:6060' ]
   # Networks
   # none are set by default
 

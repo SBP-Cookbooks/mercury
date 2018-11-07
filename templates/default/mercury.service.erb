@@ -1,0 +1,18 @@
+[Unit]
+Description=mercury
+After=network.target
+
+[Service]
+<%- @mercury['environment'].each do | envval | -%>
+Environment=<%= envval  %>
+<%- end -%>
+ExecStart=<%= @mercury['package']['bin'] %> -config-file <%= @mercury['package']['config'] %> -pid-file <%= @mercury['package']['pid'] %> $OPTIONS
+ExecReload=/bin/kill -1 $MAINPID
+KillSignal=TERM
+User=root
+WorkingDirectory=/
+Restart=always
+LimitNOFILE=16384
+
+[Install]
+WantedBy=multi-user.target
