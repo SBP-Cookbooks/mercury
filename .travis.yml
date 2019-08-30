@@ -1,10 +1,10 @@
 sudo: required
-dist: bionic
+dist: xenial
 
 addons:
   apt:
     sources:
-      - chef-stable-bionic
+      - chef-stable-xenial
     packages:
       - chefdk
 
