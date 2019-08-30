@@ -26,6 +26,8 @@ script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen 
 
 jobs:
   include:
+    - stage: gotest
+      script: ./gotest.sh
     - stage: unittest
       if: type = pull_request
       script: /opt/chefdk/bin/chef exec rake
@@ -44,6 +46,7 @@ jobs:
       script: ./upload.sh
 
 stages:
+  - gotest
   - unittest
   - test-centos7-chef-12
   - test-centos7-chef-15
