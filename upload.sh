@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 git describe --tags --always > .version
 echo "path: ${PWD} version: $(cat .version)"
@@ -36,7 +36,9 @@ esac
 newversion="${major}.${minor}.${patch}"
 
 sudo apt-get install golang-go
+echo "installing ghr"
 go get github.com/tcnksm/ghr
+echo "ghr reported $?"
 
 if [ "${oldversion}" == "${newversion}" ]; then
     echo "version not updated: old: ${oldversion} new: ${newversion}"
@@ -45,7 +47,7 @@ fi
 
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
-
+find / -name "ghr"
 ~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion}
 
 sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
