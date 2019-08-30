@@ -35,7 +35,12 @@ case "${REF}" in
 esac
 newversion="${major}.${minor}.${patch}"
 
-sudo apt-get install golang-go
+# install a more recent Go than apt-get can supply
+curl https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz -o go.tar.gz
+tar -xvzf go.tar.gz -C /usr/local/
+export GOROOT=/usr/local/go
+export PATH="$PATH:${GOROOT}/bin"
+
 echo "installing ghr"
 go get github.com/tcnksm/ghr
 echo "ghr reported $?"
