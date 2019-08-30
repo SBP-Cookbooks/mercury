@@ -11,16 +11,16 @@ addons:
 # Don't `bundle install` which takes about 1.5 mins
 install: echo "skip bundle install"
 
-branches:
-  only:
-    - master
+#branches:
+#only:
+#- master
 
 services: docker
 
-env:
-  matrix:
-  - INSTANCE=default-centos-7
-  - INSTANCE=default-centos-7 CHEF_VERSION=12.19.36
+#env:
+#matrix:
+#- INSTANCE=default-centos-7
+#- INSTANCE=default-centos-7 CHEF_VERSION=12.19.36
 
 before_script:
   - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
@@ -33,19 +33,24 @@ before_script:
 
 script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify ${INSTANCE}
 
-matrix:
-  allow_failures:
-    - env: INSTANCE=default-centos-7
-  include:
-    - script:
-      - /opt/chefdk/bin/chef exec rake
-      env: UNIT_AND_LINT=1
+#matrix:
+#allow_failures:
+#- env: INSTANCE=default-centos-7
+#include:
+#- script:
+#- /opt/chefdk/bin/chef exec rake
+#env: UNIT_AND_LINT=1
 
 jobs:
   include:
     - stage: unittest
       script: /opt/chefdk/bin/chef exec rake
       env: UNIT_AND_LINT=1
+    - stage: test
+      if: branch = master
+      script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      script: CHEF_VERSION=12.19.36 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      script: CHEF_VERSION=15.2.20 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
     - stage: testdeploy
       if: type = pull_request
       script:
@@ -58,6 +63,7 @@ jobs:
       if: branch = master
       name: "deploy to supermarket"
       script: echo "deploy"
+      script: knife supermarket share -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V -n
 
 stages:
   - unittest
