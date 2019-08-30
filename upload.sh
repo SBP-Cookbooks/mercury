@@ -34,6 +34,10 @@ case "${REF}" in
 esac
 newversion="${major}.${minor}.${patch}"
 
+echo "setup ghr"
+sudo apt-get install golang-go
+go get github.com/tcnksm/ghr
+
 if [ "${oldversion}" == "${newversion}" ]; then
     echo "version not updated: old: ${oldversion} new: ${newversion}"
     exit 0
@@ -42,8 +46,7 @@ fi
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 rm .version
 
-sudo apt-get install golang-go
-go get github.com/tcnksm/ghr
+VERSION=$(cat .version)
 
 ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${VERSION}" ${VERSION}
 
