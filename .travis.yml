@@ -43,6 +43,14 @@ matrix:
 
 jobs:
   include:
+    - stage: unittest
+      script: /opt/chefdk/bin/chef exec rake
     - stage: deploy
       name: "deploy to supermarket"
       script: echo "deploy"
+
+stages:
+  - unittest
+  - test
+  - deploy
+
