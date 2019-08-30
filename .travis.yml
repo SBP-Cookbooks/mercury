@@ -45,12 +45,21 @@ jobs:
   include:
     - stage: unittest
       script: /opt/chefdk/bin/chef exec rake
+      env: UNIT_AND_LINT=1
+    - stage: testdeploy
+      script:
+          - env
+          - echo ${PWD}
+          - uname -a
+          - whoami
     - stage: deploy
+      if: branch = master
       name: "deploy to supermarket"
       script: echo "deploy"
 
 stages:
   - unittest
   - test
+  - testdeploy
   - deploy
 
