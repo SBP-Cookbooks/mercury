@@ -43,15 +43,15 @@ script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen 
 
 jobs:
   include:
-    - stage: unittest
-      script: /opt/chefdk/bin/chef exec rake
-      env: UNIT_AND_LINT=1
-    - stage: test-centos7-chef-12
-      if: type = pull_request
-      script: CHEF_VERSION=12.19.36 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
-    - stage: test-centos7-chef-15
-      if: type = pull_request
-      script: CHEF_VERSION=15.2.20 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      #- stage: unittest
+      #script: /opt/chefdk/bin/chef exec rake
+      #env: UNIT_AND_LINT=1
+      #- stage: test-centos7-chef-12
+      #if: type = pull_request
+      #script: CHEF_VERSION=12.19.36 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      #- stage: test-centos7-chef-15
+      #if: type = pull_request
+      #script: CHEF_VERSION=15.2.20 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
     - stage: testdeploy
       if: type = pull_request
       script:
@@ -66,9 +66,9 @@ jobs:
       script: ./upload.sh
 
 stages:
-  - unittest
-  - test-centos7-chef-12
-  - test-centos7-chef-15
+    #- unittest
+    #- test-centos7-chef-12
+    #- test-centos7-chef-15
   - testdeploy
   - deploy
 
