@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/sbp-cookbooks/mercury.svg?branch=master)](https://travis-ci.org/sbp-cookbooks/mercury)
 
-# Mercury Global Loadbalancer Cookbook
+![Mercury](https://github.com/sbp-cookbooks/mercury/blob/master/logo.png "Mercury GLB Cookbook")
 
-Installs and configures Mercury Global Loadbalancer.
+Opscode Cookbook that Installs and configures Mercury Global Loadbalancer.
 
 ## What is Mercury?
 
@@ -21,6 +21,7 @@ This makes mercury able to loadbalance across multiple cloud environments using 
 
 - RHEL 6+, CentOS6+
 - RHEL 7+, CentOS7+
+- RHEL 8+, CentOS8+
 
 ## Documentation
 
