@@ -9,6 +9,7 @@ gimme stable
 go version
 go env
 
+source ${GIMME_ENV}
 #export GOROOT=/usr/local/go
 #export PATH="$PATH:${GOROOT}/bin"
 
