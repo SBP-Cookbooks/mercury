@@ -34,7 +34,6 @@ case "${REF}" in
 esac
 newversion="${major}.${minor}.${patch}"
 
-echo "setup ghr"
 sudo apt-get install golang-go
 go get github.com/tcnksm/ghr
 
