@@ -26,8 +26,6 @@ script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen 
 
 jobs:
   include:
-    - stage: gotest
-      script: ./gotest.sh
     - stage: unittest
       if: type = pull_request
       script: /opt/chefdk/bin/chef exec rake
@@ -41,12 +39,12 @@ jobs:
       script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
       env: CHEF_VERSION=15.2.20
     - stage: deploy
-      if: type = push
+      if: type = push AND \
+           branch = master
       name: "deploy to supermarket"
       script: ./upload.sh
 
 stages:
-  - gotest
   - unittest
   - test-centos7-chef-12
   - test-centos7-chef-15
