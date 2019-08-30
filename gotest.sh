@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
 echo "starting script..."
+env | grep TRAVIS
 gimme -l
 gimme stable
 # install a more recent Go than apt-get can supply
@@ -9,7 +10,7 @@ gimme stable
 go version
 go env
 
-source ${GIMME_ENV}
+source /home/travis/.gimme/envs/*.env
 #export GOROOT=/usr/local/go
 #export PATH="$PATH:${GOROOT}/bin"
 
