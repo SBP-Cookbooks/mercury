@@ -4,7 +4,7 @@ dist: bionic
 addons:
   apt:
     sources:
-      - chef-stable-trusty
+      - chef-stable-bionic
     packages:
       - chefdk
 
