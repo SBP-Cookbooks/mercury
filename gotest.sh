@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash -ex
+
+echo "starting script..."
 gimme -l
 gimme stable
 # install a more recent Go than apt-get can supply
