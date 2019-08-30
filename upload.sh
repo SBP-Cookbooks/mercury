@@ -46,7 +46,7 @@ fi
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
 
-ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion}
+~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion}
 
 sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
