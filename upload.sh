@@ -17,6 +17,7 @@ fi
 major=$(cut -f1 -d. .version)
 minor=$(cut -f2 -d. .version)
 patch=$(cut -f3 -d. .version | cut -f1 -d-)
+rm .version
 oldversion="${major}.${minor}.${patch}"
 case "${REF}" in
     bugfix:*|bug:*|fix:*|automatic-patch:*)
@@ -43,13 +44,11 @@ if [ "${oldversion}" == "${newversion}" ]; then
 fi
 
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
-rm .version
 
-VERSION=$(cat .version)
 
-ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${VERSION}" ${VERSION}
+ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion}
 
-sed -e "s/version          '1.0.0'/version          '${VERSION}'/" -i metadata.rb
+sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
 
 echo "${SUPERMARKET_PEM}" | tr _ "\n" > ~/mercury.pem
