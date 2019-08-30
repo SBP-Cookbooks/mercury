@@ -52,6 +52,6 @@ ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n 
 sed -e "s/VERSION_REPLACED_BY_CI_DOWNLOAD_YOUR_PACKAGE_FROM_CHEF_SUPERMARKET_IO_INSTEAD/${VERSION}/" -i metadata.rb
 cat metadata.rb
 
-echo -e "${SUPERMARKET_PEM}" > ~/mercury.pem
+echo "${SUPERMARKET_PEM}" | tr _ "\n" > ~/mercury.pem
 chmod 600 ~/mercury.pem
 knife supermarket share -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V -n
