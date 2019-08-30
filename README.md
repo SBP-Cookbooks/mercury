@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/sbp-cookbooks/mercury.svg?branch=master)](https://travis-ci.org/sbp-cookbooks/mercury)
+
 ![Mercury](https://github.com/sbp-cookbooks/mercury/blob/master/logo.png "Mercury GLB Cookbook")
 
 Opscode Cookbook that Installs and configures Mercury Global Loadbalancer.

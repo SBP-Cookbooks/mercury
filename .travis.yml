@@ -67,7 +67,8 @@ jobs:
 
 stages:
   - unittest
-  - test
+  - test-centos7-chef-12
+  - test-centos7-chef-15
   - testdeploy
   - deploy
 
