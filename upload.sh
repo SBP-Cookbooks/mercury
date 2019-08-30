@@ -37,7 +37,7 @@ newversion="${major}.${minor}.${patch}"
 
 # install a more recent Go than apt-get can supply
 curl https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz -o go.tar.gz
-tar -xvzf go.tar.gz -C /usr/local/
+sudo tar -xvzf go.tar.gz -C /usr/local/
 export GOROOT=/usr/local/go
 export PATH="$PATH:${GOROOT}/bin"
 
