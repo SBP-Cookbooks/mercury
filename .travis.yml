@@ -41,3 +41,8 @@ matrix:
       - /opt/chefdk/bin/chef exec rake
       env: UNIT_AND_LINT=1
 
+jobs:
+  include:
+    - stage: deploy
+      name: "deploy to supermarket"
+      script: echo "deploy"
