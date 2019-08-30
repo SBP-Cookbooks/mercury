@@ -47,12 +47,14 @@ jobs:
       script: /opt/chefdk/bin/chef exec rake
       env: UNIT_AND_LINT=1
     - stage: testdeploy
+      if: type = pull_request
       script:
           - env
           - echo ${PWD}
           - uname -a
           - whoami
     - stage: deploy
+      if: type = push
       if: branch = master
       name: "deploy to supermarket"
       script: echo "deploy"
