@@ -27,6 +27,7 @@ script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen 
 jobs:
   include:
     - stage: unittest
+      if: type = pull_request
       script: /opt/chefdk/bin/chef exec rake
       env: UNIT_AND_LINT=1
     - stage: test-centos7-chef-12
