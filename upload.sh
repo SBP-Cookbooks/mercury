@@ -49,7 +49,7 @@ VERSION=$(cat .version)
 
 ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${VERSION}" ${VERSION}
 
-sed -e "s/VERSION_REPLACED_BY_CI_DOWNLOAD_YOUR_PACKAGE_FROM_CHEF_SUPERMARKET_IO_INSTEAD/${VERSION}/" -i metadata.rb
+sed -e "s/version          '1.0.0'/version          '${VERSION}'/" -i metadata.rb
 cat metadata.rb
 
 echo "${SUPERMARKET_PEM}" | tr _ "\n" > ~/mercury.pem
