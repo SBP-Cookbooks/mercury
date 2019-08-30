@@ -51,7 +51,7 @@ source /home/travis/.gimme/envs/*.env
 
 echo "installing ghr"
 go get github.com/tcnksm/ghr
-echo "ghr reported $?"
+echo "ghr install reported $?"
 
 if [ "${oldversion}" == "${newversion}" ]; then
     echo "version not updated: old: ${oldversion} new: ${newversion}"
@@ -60,7 +60,10 @@ fi
 
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
-~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion}
+mkdir tmpdir
+echo "executing ghr"
+~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
+echo "ghr reported $?"
 
 sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
