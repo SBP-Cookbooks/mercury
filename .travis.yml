@@ -47,4 +47,3 @@ stages:
   - test-centos7-chef-12
   - test-centos7-chef-15
   - deploy
-
