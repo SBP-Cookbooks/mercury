@@ -48,9 +48,9 @@ jobs:
       env: UNIT_AND_LINT=1
     - stage: test
       if: branch = master
-      script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
-      script: CHEF_VERSION=12.19.36 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
-      script: CHEF_VERSION=15.2.20 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      - script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      - script: CHEF_VERSION=12.19.36 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
+      - script: CHEF_VERSION=15.2.20 KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
     - stage: testdeploy
       if: type = pull_request
       script:
@@ -58,12 +58,11 @@ jobs:
           - echo ${PWD}
           - uname -a
           - whoami
+          - ./upload.sh
     - stage: deploy
       if: type = push
-      if: branch = master
       name: "deploy to supermarket"
-      script: echo "deploy"
-      script: knife supermarket share -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V -n
+      script: ./upload.sh
 
 stages:
   - unittest

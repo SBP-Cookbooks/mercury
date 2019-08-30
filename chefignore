@@ -105,3 +105,4 @@ Strainerfile
 ###########
 .vagrant
 Vagrantfile
+upload.sh
