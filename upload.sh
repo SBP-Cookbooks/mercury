@@ -68,4 +68,4 @@ cat metadata.rb
 
 echo "${SUPERMARKET_PEM}" | tr _ "\n" > ~/mercury.pem
 chmod 600 ~/mercury.pem
-knife supermarket share -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V -n
+knife supermarket share -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V
