@@ -81,7 +81,7 @@ knife supermarket share -u rdoorn -s https://api.opscode.com/organizations/rdoor
 echo "${GITLAB_DEPLOY_KEY}" | tr _ "\n" > ~/gitlab.pem
 chmod 600 ~/gitlab.pem
 #echo -e "Host *\nStrictHostKeyChecking no\n" > ~/.ssh/config
-export GIT_SSH_COMMAND="ssh -i ~/gitlab.pem -F /dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes UserKnownHostsFile=/dev/null" 
+export GIT_SSH_COMMAND="ssh -i ~/gitlab.pem -F /dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes" 
 git clone ssh://git@sbp.gitlab.schubergphilis.com:2228/SBP-Cookbooks/sbp_mercury_wrapper.git
 cd sbp_mercury_wrapper
 
