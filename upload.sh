@@ -55,7 +55,7 @@ echo "ghr install reported $?"
 
 if [ "${oldversion}" == "${newversion}" ]; then
     echo "version not updated: old: ${oldversion} new: ${newversion}"
-    exit 0
+    #exit 0
 fi
 
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
