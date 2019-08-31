@@ -60,6 +60,7 @@ fi
 
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
+# update version number before upload to supermarket
 mkdir tmpdir
 mercuryversion=$(grep "mercury\['package'\]\['version'\] =" attributes/mercury.rb | cut -f6 -d\')
 echo "${mercuryversion}" > tmpdir/mercury.version
@@ -67,9 +68,28 @@ echo "executing ghr"
 ~/gopath/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
 echo "ghr reported $?"
 
-sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
+sed -e "s/version          '.*'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
 
+# upload to supermarket
 echo "${SUPERMARKET_PEM}" | tr _ "\n" > ~/mercury.pem
 chmod 600 ~/mercury.pem
-knife supermarket share -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V
+knife supermarket share -u rdoorn -s https://api.opscode.com/organizations/rdoorn -o /home/travis/build/sbp-cookbooks -k ~/mercury.pem mercury -V
+
+
+# update wrapper cookbook
+echo "${GITLAB_DEPLOY_KEY}" | tr _ "\n" > ~/gitlab.pem
+chmod 600 ~/gitlab.pem
+GIT_SSH_COMMAND="ssh -i gitlab-mercury-wrapper -F /dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes" git clone ssh://git@sbp.gitlab.schubergphilis.com:2228/SBP-Cookbooks/sbp_mercury_wrapper.git
+cd sbp_mercury_wrapper
+
+wrapperversion=$(grep ^version metadata.rb| cut -f2 -d\')
+wrappermajmin=$(echo ${wrapperversion} | cut -f1-2 -d.)
+wrapperpatch=$(echo ${wrapperversion} | cut -f3 -d.)
+wrapperpatch=$((wrapperpatch+1))
+wrappernewversion="${wrappermajmin}.${wrapperpatch}"
+
+sed -e "s/depends 'mercury', '= .*'/depends 'mercury', '= ${mercuryversion}'/" -e "s/version          '.*'/version          '${wrappernewversion}'/" -i metadata.rb
+git add metadata.rb
+git commit -m 'automatic-patch: updating version of mercury cookbook"
+git push
