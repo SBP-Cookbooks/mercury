@@ -43,9 +43,9 @@ jobs:
       name: "deploy to supermarket"
       script: ./upload.sh
 
+
 stages:
   - unittest
   - test-centos7-chef-12
   - test-centos7-chef-15
   - deploy
-
