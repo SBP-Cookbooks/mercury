@@ -61,6 +61,8 @@ fi
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
 mkdir tmpdir
+mercuryversion=$(grep "mercury\['package'\]\['version'\] =" attributes/mercury.rb | cut -f6 -d\')
+echo "${mercuryversion}" > tmpdir/mercury.version
 echo "executing ghr"
 ~/gopath/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
 echo "ghr reported $?"
