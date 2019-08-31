@@ -55,18 +55,15 @@ echo "ghr install reported $?"
 
 if [ "${oldversion}" == "${newversion}" ]; then
     echo "version not updated: old: ${oldversion} new: ${newversion}"
-    #exit 0
+    exit 0
 fi
 
 echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
 mkdir tmpdir
 echo "executing ghr"
-find / -name "ghr"
-export GITHUB_TOKEN="fake"
-~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
+~/gopath/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
 echo "ghr reported $?"
-exit 1
 
 sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
