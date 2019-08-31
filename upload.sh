@@ -91,7 +91,7 @@ wrapperpatch=$(echo ${wrapperversion} | cut -f3 -d.)
 wrapperpatch=$((wrapperpatch+1))
 wrappernewversion="${wrappermajmin}.${wrapperpatch}"
 
-sed -e "s/depends 'mercury', '= .*'/depends 'mercury', '= ${mercuryversion}'/" -e "s/version          '.*'/version          '${wrappernewversion}'/" -i metadata.rb
+sed -e "s/depends 'mercury', '= .*'/depends 'mercury', '= ${newversion}'/" -e "s/version          '.*'/version          '${wrappernewversion}'/" -i metadata.rb
 git add metadata.rb
-git commit -m 'automatic-patch: updating version of mercury cookbook'
+git commit -m "automatic-patch: updating version of mercury to v${mercuryversion}"
 git push
