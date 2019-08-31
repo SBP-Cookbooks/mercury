@@ -39,13 +39,13 @@ jobs:
       script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen verify default-centos-7
       env: CHEF_VERSION=15.2.20
     - stage: deploy
-      if: type = push AND branch = master
+      #if: type = push AND branch = master
       name: "deploy to supermarket"
       script: ./upload.sh
 
 stages:
+  - deploy
   - unittest
   - test-centos7-chef-12
   - test-centos7-chef-15
-  - deploy
 

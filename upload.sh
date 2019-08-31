@@ -45,7 +45,7 @@ gimme 1.12.9
 go version
 go env
 
-source /home/travis/.gimme/envs/*.env
+. /home/travis/.gimme/envs/*.env
 #export GOROOT=/usr/local/go
 #export PATH="$PATH:${GOROOT}/bin"
 
@@ -62,9 +62,11 @@ echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
 mkdir tmpdir
 echo "executing ghr"
-find . -name "ghr"
+find / -name "ghr"
+export GITHUB_TOKEN="fake"
 ~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
 echo "ghr reported $?"
+exit 1
 
 sed -e "s/version          '1.0.0'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
