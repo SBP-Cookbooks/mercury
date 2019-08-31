@@ -50,7 +50,7 @@ source /home/travis/.gimme/envs/*.env
 #export PATH="$PATH:${GOROOT}/bin"
 
 echo "installing ghr"
-go get github.com/tcnksm/ghr
+go get -v github.com/tcnksm/ghr
 echo "ghr install reported $?"
 
 if [ "${oldversion}" == "${newversion}" ]; then
@@ -62,6 +62,7 @@ echo "new version to be created: old: ${oldversion} new: ${newversion}"
 
 mkdir tmpdir
 echo "executing ghr"
+find . -name "ghr"
 ~/go/bin/ghr -soft -t ${GITHUB_TOKEN} -u sbp-cookbooks -r mercury -c ${TRAVIS_COMMIT} -n "Mercury Cookbook v${newversion}" ${newversion} ./tmpdir
 echo "ghr reported $?"
 
