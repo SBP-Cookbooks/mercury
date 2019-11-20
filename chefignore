@@ -108,3 +108,6 @@ Vagrantfile
 upload.sh
 logo.png
 .version
+
+#ci/cd
+tmpdir

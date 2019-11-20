@@ -71,6 +71,9 @@ echo "ghr reported $?"
 sed -e "s/version          '.*'/version          '${newversion}'/" -i metadata.rb
 cat metadata.rb
 
+# remove temp dir
+rm -rf tmpdir
+
 # upload to supermarket
 echo "${SUPERMARKET_PEM}" | tr _ "\n" > ~/mercury.pem
 chmod 600 ~/mercury.pem
