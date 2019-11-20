@@ -3,8 +3,6 @@
 git describe --tags --always > .version
 echo "path: ${PWD} version: $(cat .version)"
 
-
-
 if [ "$1" == "" ]; then
     REF=$(git log -1 --pretty=%B)
     echo "Last commit subject: ${REF}"
@@ -12,7 +10,6 @@ else
     REF="$@"
     echo "Manual commit subject: ${REF}"
 fi
-
 
 major=$(cut -f1 -d. .version)
 minor=$(cut -f2 -d. .version)
@@ -46,8 +43,6 @@ go version
 go env
 
 . /home/travis/.gimme/envs/*.env
-#export GOROOT=/usr/local/go
-#export PATH="$PATH:${GOROOT}/bin"
 
 echo "installing ghr"
 go get -v github.com/tcnksm/ghr
