@@ -20,7 +20,7 @@
 default['mercury'].tap do |mercury|
   # Package information
   mercury['package']['name'] = 'mercury'
-  mercury['package']['version'] = '1.1.7'
+  mercury['package']['version'] = '1.1.8'
   mercury['package']['arch'] = 'x86_64'
   mercury['package']['source'] = "https://github.com/schubergphilis/mercury/releases/download/#{mercury['package']['version']}/mercury-#{mercury['package']['version']}-1.#{mercury['package']['arch']}.rpm"
   mercury['package']['config'] = '/etc/mercury/mercury.toml'
