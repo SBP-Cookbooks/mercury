@@ -1,6 +1,6 @@
 # CHANGE LOG for Mercury
 
- This file is used to list changes made in each major version of Mercury.
+This file is used to list changes made in each major version of Mercury.
 
 ## 1.2.6 till Current
 Changes:
