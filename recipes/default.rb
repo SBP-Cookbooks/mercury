@@ -247,7 +247,11 @@ config['loadbalancer']['pools'].each do |poolname, pool|
       end
       # chef can return multiple in search, so go through all of them
       backend_nodes.each do |m|
-        nodelist << { hostname: m['hostname'] ? m['hostname'] : m['ip'], ip: m['ip'] ? m['ip'] : m['hostname'], port: n['port'] }
+        t = { hostname: m['hostname'] ? m['hostname'] : m['ip'], ip: m['ip'] ? m['ip'] : m['hostname'], port: n['port'] }
+        if !m['weight'].nil?
+          t['weight'] = m['weight']
+        end
+        nodelist << t
       end
     end
     if nodelist.empty?
